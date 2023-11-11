@@ -33,16 +33,18 @@ public class Cell {
 		return position;
 	}
 
-	public synchronized void request(Snake snake)
-			throws InterruptedException {
+	public synchronized void request(Snake snake) throws InterruptedException {
 		//TODO coordination and mutual exclusion
-		
+		while (isOcupied()) {
+			wait(); //A cobra espera até que a célula fique livre. 
+		}
 		ocuppyingSnake=snake;
 	}
 
 	public void release() {
 		//TODO
 		ocuppyingSnake=null;
+		notifyAll(); //Notifica as cobras que estão à espera. 
 	}
 
 	public boolean isOcupiedBySnake() {

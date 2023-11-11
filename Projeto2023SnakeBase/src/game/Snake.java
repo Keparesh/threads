@@ -1,6 +1,8 @@
 package game;
 
+
 import java.io.Serializable;
+import java.util.List;
 import java.util.LinkedList;
 
 import javax.print.attribute.standard.PrinterMessageFromOperator;
@@ -43,8 +45,9 @@ public abstract class Snake extends Thread implements Serializable{
 	public LinkedList<Cell> getCells() {
 		return cells;
 	}
+	
 	protected void move(Cell cell) throws InterruptedException {
-		// TODO alterado a 9 novembro 
+		
 		cell.request(this);
 		cells.add(cell);
 		if (getSize() < cells.size()) {
@@ -56,6 +59,7 @@ public abstract class Snake extends Thread implements Serializable{
 		
 		
 	}
+	
 	
 	public LinkedList<BoardPosition> getPath() {
 		LinkedList<BoardPosition> coordinates = new LinkedList<BoardPosition>();
