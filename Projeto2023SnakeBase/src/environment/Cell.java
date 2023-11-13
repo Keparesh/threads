@@ -39,7 +39,8 @@ public class Cell {
 			wait(); //A cobra espera até que a célula fique livre. 
 		}
 		if (isOcupiedByGoal()) {
-			 this.getGoal().captureGoal();//se a cobra tentar entrar num goal, ele faz capture de um goal
+			 this.getGoal().captureGoal(snake);//se a cobra tentar entrar num goal, ele faz capture de um goal
+			 this.gameElement = null;
 		}
 		ocuppyingSnake=snake;
 	}
