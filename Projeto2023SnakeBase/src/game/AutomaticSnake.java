@@ -21,17 +21,13 @@ public class AutomaticSnake extends Snake {
 	public void run() {
 		doInitialPositioning();
 		System.err.println("initial size:"+cells.size());
-			
+		//TODO: automatic movement
+		
 		while(this.getSize() < 10){
 			try {
-				Thread.sleep(this.getBoard().REMOTE_REFRESH_INTERVAL);
+				Thread.sleep(this.getBoard().REMOTE_REFRESH_INTERVAL); //
 				
-				// Movimento até alcançar o tamanho 10
-				BoardPosition actualPos = this.getCells().getLast().getPosition();
-				BoardPosition goalPos = getBoard().getGoalPosition();
-				
-				Cell nextCell = this.getBoard().getCell(goalPos);
-				this.move(nextCell);
+				moveTowardsGoal();
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -39,23 +35,7 @@ public class AutomaticSnake extends Snake {
 				Thread.currentThread().interrupt(); //Preserva o estado de interrupção
 			}
 		}
-		
-		//TODO: automatic movement
-		
-		//Após alcançar o tamanho 10, implementa o movimento automático mais avançado 
-		while (!Thread.currentThread().isInterrupted()) {
-			try {
-				Thread.sleep(this.getBoard().REMOTE_REFRESH_INTERVAL);
-				moveTowardsGoal();	
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				Thread.currentThread().interrupt();
-			}
-		}
-		
-		
-		
-		
+			
 	}
 	
 	private void moveTowardsGoal() throws InterruptedException {

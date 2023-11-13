@@ -52,7 +52,7 @@ public class Cell {
 	}
 
 
-	public  void setGameElement(GameElement element) {
+	public synchronized void setGameElement(GameElement element) {
 		// TODO coordination and mutual exclusion
 		gameElement=element;
 
