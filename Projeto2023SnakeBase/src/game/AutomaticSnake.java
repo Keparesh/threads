@@ -19,11 +19,26 @@ public class AutomaticSnake extends Snake {
 
 	@Override
 	public void run() {
+		//Posicionar a cobra na posição inicial do tabuleiro
 		doInitialPositioning();
+		
 		System.err.println("initial size:"+cells.size());
+		
 		//TODO: automatic movement
 		
-		while(this.getSize() < 10){
+		//Loop principal da cobra
+		while(true){
+			//verifica se o tabuleiro é uma instância de LocalBoard
+			if (this.getBoard() instanceof LocalBoard) {
+				LocalBoard localBoard = (LocalBoard) this.getBoard();
+				
+				//verifica se o jogo ainda está ativo e se a cobra não atingiu o tamanho limite
+				//se alguma destas condições for falsa, sai do loop 
+				if (!localBoard.isGameActive() || this.getSize() >= 10) {
+					break;
+				}
+			}
+			
 			try {
 				Thread.sleep(this.getBoard().REMOTE_REFRESH_INTERVAL); //
 				
@@ -33,6 +48,7 @@ public class AutomaticSnake extends Snake {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				Thread.currentThread().interrupt(); //Preserva o estado de interrupção
+				break; //interrompe o loop se a thread for interrompida
 			}
 		}
 	}

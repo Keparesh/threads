@@ -48,15 +48,33 @@ public abstract class Snake extends Thread implements Serializable{
 	
 	protected void move(Cell cell) throws InterruptedException {
 		
+		//pede para ocupar a célula
 		cell.request(this);
+		
+		//adiciona a célula à lista de células ocupadas pela cobra
 		cells.add(cell);
+		
+		//se o tamanho da cobra exceder o tamanho atual, remove a útltima célula
 		if (getSize() < cells.size()) {
 			Cell last = cells.removeFirst();
 			last.release();
 			
 		}
+		
+		//Notifica mudanças no tabuleiro
 		getBoard().setChanged();
 		
+		
+		//verifica se o tamanho da cobra atingiu ou excedeu o limite
+		if (this.getSize() >= 10) {
+			
+			//verifica se o tabuleiro é uma instância da LocalBoard
+			if (this.getBoard() instanceof LocalBoard ) {
+				//faz o cast para LocalBoard e invoca o endGame
+				LocalBoard localBoard = (LocalBoard) getBoard();
+				localBoard.endGame();
+			}
+		}
 		
 	}
 	

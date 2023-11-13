@@ -25,6 +25,8 @@ public class LocalBoard extends Board{
 	private static final int NUM_SNAKES = 2;
 	private static final int NUM_OBSTACLES = 25;
 	private static final int NUM_SIMULTANEOUS_MOVING_OBSTACLES = 3;
+	
+	private volatile boolean gameActive = true;
 
 	public LocalBoard() {
 		
@@ -46,7 +48,14 @@ public class LocalBoard extends Board{
 		setChanged();
 	}
 
+	public synchronized void endGame() {
+		gameActive = false;
+		notifyAll();
+	}
 	
+	public boolean isGameActive() {
+		return gameActive;
+	}
 
 	@Override
 	public void handleKeyPress(int keyCode) {
