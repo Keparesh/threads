@@ -16,10 +16,18 @@ public class Goal extends GameElement  {
 	}
 	public void incrementValue() throws InterruptedException {
 		//TODO
+		this.value ++;
 	}
 
-	public int captureGoal() {
+	public Board getBoard() {
+		return this.board;
+	}
+	
+	public int captureGoal() throws InterruptedException {
 //		TODO
+		this.incrementValue();
+		getBoard().setGoalPosition(getBoard().findRandomFreePosition());
+		
 		return -1;
 	}
 }
