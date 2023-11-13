@@ -26,8 +26,6 @@ public class LocalBoard extends Board{
 	private static final int NUM_OBSTACLES = 25;
 	private static final int NUM_SIMULTANEOUS_MOVING_OBSTACLES = 3;
 
-	
-
 	public LocalBoard() {
 		
 		for (int i = 0; i < NUM_SNAKES; i++) {

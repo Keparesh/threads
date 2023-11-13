@@ -41,7 +41,7 @@ public class Cell {
 		ocuppyingSnake=snake;
 	}
 
-	public void release() {
+	public synchronized void release() {
 		//TODO
 		ocuppyingSnake=null;
 		notifyAll(); //Notifica as cobras que estão à espera. 

@@ -21,15 +21,16 @@ public class AutomaticSnake extends Snake {
 	public void run() {
 		doInitialPositioning();
 		System.err.println("initial size:"+cells.size());
-		
+			
 		while(this.getSize() < 10){
 			try {
 				Thread.sleep(this.getBoard().REMOTE_REFRESH_INTERVAL);
 				
 				// Movimento até alcançar o tamanho 10
 				BoardPosition actualPos = this.getCells().getLast().getPosition();
-				BoardPosition nextPos = new BoardPosition(actualPos.x+1,actualPos.y); 
-				Cell nextCell = this.getBoard().getCell(nextPos);
+				BoardPosition goalPos = getBoard().getGoalPosition();
+				
+				Cell nextCell = this.getBoard().getCell(goalPos);
 				this.move(nextCell);
 				
 			} catch (InterruptedException e) {
@@ -52,6 +53,9 @@ public class AutomaticSnake extends Snake {
 			}
 		}
 		
+		
+		
+		
 	}
 	
 	private void moveTowardsGoal() throws InterruptedException {
@@ -71,16 +75,19 @@ public class AutomaticSnake extends Snake {
 		
 		// Iterar sobre todas as posições vizinhas para encontrar a posição mais próxima do objetivo
 		for (BoardPosition neighbor : neighbors) {
+			Cell neighborCell = getBoard().getCell(neighbor);
 			
-			//Calcular a distância da posição vizinha até ao objetivo
-			double distance = neighbor.distanceTo(goalPosition);
+			//Se a célula vizinha não estiver ocupada, calcula a distância até ao objetivo
+			if (!neighborCell.isOcupied()) {
+				double distance = neighbor.distanceTo(goalPosition);
 			
-			// Se a distancia for menor do que a menor distancia já encontrada e a célula não estiver ocupada...
-			if (distance < minDistance && !getBoard().getCell(neighbor).isOcupied()) {
-				
-				//Atualiza a melhor posição e a menor distancia
-				minDistance = distance;
-				bestPosition = neighbor;
+				//Atualizar a melhor posição se esta for a menor distância encontrada até agora
+				if (distance < minDistance ) {
+					
+					//Atualiza a melhor posição e a menor distancia
+					minDistance = distance;
+					bestPosition = neighbor;
+				}
 			}
 		}
 		
@@ -92,6 +99,8 @@ public class AutomaticSnake extends Snake {
 			
 			//Mover a cobra para a posição escolhida
 			this.move(nextCell);
+		} else {
+			//Se não aparecer uma célula livre, a cobra fica parada
 		}
 		
 	}
