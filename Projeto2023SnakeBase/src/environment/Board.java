@@ -40,6 +40,15 @@ public abstract class Board extends Observable {
 		return new BoardPosition((int) (Math.random() *NUM_ROWS),(int) (Math.random() * NUM_ROWS));
 	}
 
+	public BoardPosition findRandomFreePosition() {
+		BoardPosition randomPos;
+		do {
+			randomPos = getRandomPosition();
+		} while (getCell(randomPos).isOcupied());
+		return randomPos;
+	}
+	
+	
 	public BoardPosition getGoalPosition() {
 		return goalPosition;
 	}

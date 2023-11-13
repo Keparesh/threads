@@ -35,7 +35,6 @@ public class AutomaticSnake extends Snake {
 				Thread.currentThread().interrupt(); //Preserva o estado de interrupção
 			}
 		}
-			
 	}
 	
 	private void moveTowardsGoal() throws InterruptedException {
@@ -79,9 +78,8 @@ public class AutomaticSnake extends Snake {
 			
 			//Mover a cobra para a posição escolhida
 			this.move(nextCell);
-		} else {
-			//Se não aparecer uma célula livre, a cobra fica parada
-		}
+			
+		} 
 		
 	}
 	
