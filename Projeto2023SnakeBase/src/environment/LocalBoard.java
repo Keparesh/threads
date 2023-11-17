@@ -1,6 +1,7 @@
 package environment;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.concurrent.Executors;
 import game.GameElement;
 import game.Goal;
 import game.Obstacle;
+import game.ObstacleMover;
 import game.Server;
 import game.Snake;
 import game.AutomaticSnake;
+
 
 /** Class representing the state of a game running locally
  * 
@@ -27,7 +30,7 @@ public class LocalBoard extends Board{
 	private static final int NUM_SIMULTANEOUS_MOVING_OBSTACLES = 3;
 	
 	private volatile boolean gameActive = true;
-
+	
 	public LocalBoard() {
 		
 		for (int i = 0; i < NUM_SNAKES; i++) {
@@ -38,16 +41,38 @@ public class LocalBoard extends Board{
 		addObstacles( NUM_OBSTACLES);
 		
 		Goal goal=addGoal();
-//		System.err.println("All elements placed");
+		// System.err.println("All elements placed");
 	}
 
 	public void init() {
+		
 		for(Snake s:snakes)
 			s.start();
+		
 		// TODO: launch other threads
+		
+		ExecutorService executor = Executors.newFixedThreadPool(NUM_SIMULTANEOUS_MOVING_OBSTACLES);
+		for (Obstacle obs : this.getObstacles()) {
+			executor.submit(new ObstacleMover(obs, this));
+		}
+		
 		setChanged();
 	}
 
+	public void resetSnakesDirections() {
+		System.out.println("Reseting snakes directions");
+		//Percorre todas as cobras e notifica-as para continuar movendo
+		
+		for (Snake snake : snakes) {
+			synchronized (snake) {
+				System.out.println("Notifying snake: " + snake.getIdentification());
+				snake.notifyAll();
+				snake.recalculateRoute();
+			}
+		}
+	}
+	
+	
 	public synchronized void endGame() {
 		gameActive = false;
 		notifyAll();

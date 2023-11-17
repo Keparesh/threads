@@ -3,6 +3,7 @@ package game;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.print.attribute.standard.PrinterMessageFromOperator;
@@ -86,7 +87,8 @@ public abstract class Snake extends Thread implements Serializable{
 		}
 
 		return coordinates;
-	}	
+	}
+	
 	protected void doInitialPositioning() {
 		// Random position on the first column. 
 		// At startup, snake occupies a single cell
@@ -110,11 +112,47 @@ public abstract class Snake extends Thread implements Serializable{
 		System.err.println("Snake "+getIdentification()+" starting at:"+getCells().getLast());		
 	}
 	
-	
-	
-	
 	public Board getBoard() {
 		return board;
+	}
+	
+	public void recalculateRoute() {
+		
+		Cell currentCell = cells.getLast();
+		BoardPosition goalPosition = getBoard().getGoalPosition();
+		
+		List<BoardPosition> alternativeRoutes = new ArrayList<>();
+		
+		//Encontra rotas alternativas que não estão bloqueadas por obstáculos ou pelo prórpio corpo da cobra
+		
+		for (BoardPosition neighbor : getBoard().getNeighboringPositions(currentCell)) {
+			Cell neighborCell = getBoard().getCell(neighbor);
+			if (!neighborCell.isOcupied()) {
+				System.out.println("OKKKKKKKK");
+				alternativeRoutes.add(neighbor);
+			}
+		}
+		
+		//Escolhe a rota alternativa que está mais próxima do prémio
+		BoardPosition bestPosition = null;
+		double minDistance = Double.MAX_VALUE;
+		for (BoardPosition position : alternativeRoutes) {
+			double distance = position.distanceTo(goalPosition);
+			if (distance < minDistance) {
+				minDistance = distance;
+				bestPosition = position;
+			}
+		}
+		
+		if (bestPosition != null) {
+			try {
+				Cell nextCell = getBoard().getCell(bestPosition);
+				this.move(nextCell);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+		
 	}
 	
 	

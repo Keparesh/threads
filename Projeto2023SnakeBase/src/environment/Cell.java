@@ -58,7 +58,15 @@ public class Cell {
 
 	public synchronized void setGameElement(GameElement element) {
 		// TODO coordination and mutual exclusion
-		gameElement=element;
+		
+		//Verifica se a célula já está ocupada por outro elemento
+		if (this.gameElement==null) {
+			this.gameElement=element;
+		} else {
+			
+		}
+		
+		notifyAll();
 
 	}
 
@@ -72,14 +80,24 @@ public class Cell {
 	}
 
 
-	public  Goal removeGoal() {
+	public synchronized Goal removeGoal() {
 		// TODO
 		return null;
 	}
-	public void removeObstacle() {
+	
+	public synchronized void removeObstacle() {
 	//TODO
+		
+		//Verifica se o elemento do jogo atual na célula é um obstáculo
+		
+		if (this.gameElement instanceof Obstacle) {
+			//Remove o obstáculo na célula
+			this.gameElement = null;
+		}
+		
+		//Notifica outras threads que possam estar à espera de mudanças nesta célula
+		notifyAll();
 	}
-
 
 	public Goal getGoal() {
 		return (Goal)gameElement;
