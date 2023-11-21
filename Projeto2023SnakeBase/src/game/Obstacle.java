@@ -2,6 +2,7 @@ package game;
 
 import environment.Board;
 import environment.BoardPosition;
+import environment.Cell;
 import environment.LocalBoard;
 
 public class Obstacle extends GameElement {
@@ -11,9 +12,7 @@ public class Obstacle extends GameElement {
 	private static final int OBSTACLE_MOVE_INTERVAL = 400;
 	private int remainingMoves=NUM_MOVES;
 	private Board board;
-	
-	//NÃO SEI SE POSSO METER ISTO AQUI
-	private BoardPosition position;
+
 	
 	public Obstacle(Board board) {
 		super();
@@ -23,6 +22,9 @@ public class Obstacle extends GameElement {
 	public int getRemainingMoves() {
 		return remainingMoves;
 	}
+	public Cell getCell() {
+		return getBoard().getCell(getBoardPosition()) ;
+	}
 	
 	
 	public void decrementRemainingMoves() {
@@ -30,19 +32,34 @@ public class Obstacle extends GameElement {
 			remainingMoves--;
 		}
 	}
-
-	public void setPosition(BoardPosition position) {
-		this.position = position;
+	public Board getBoard() {
+		return board;
 	}
 	
-	//NÃO SEI SE POSSO METER ESTE MÉTODO
-	public BoardPosition getPosition() {
-		return this.position;
+	public BoardPosition getBoardPosition() {
+		
+		Cell cell = null;
+		for (int i = 0; i < getBoard().getCells().length; i++) {
+	        for (int j = 0; j < getBoard().getCells()[i].length; j++) {
+	        	if(this == getBoard().getCells()[i][j].getGameElement()) {
+	        		cell = getBoard().getCell(new BoardPosition(i, j));
+	        	} 
+	        }
+		}
+		
+		BoardPosition position = cell.getPosition();
+		return position;
 	}
 	
-	//NÃO SEI SE POSSO METER ESTE MÉTODO
-	public static int getObstacleMoveInterval() {
+	public int getSleepTime(){
 		return OBSTACLE_MOVE_INTERVAL;
+	}
+	
+	public void move(Cell cell) throws InterruptedException{
+		getCell().removeObstacle();
+		cell.setGameElement(this);
+		decrementRemainingMoves();
+		getBoard().setChanged();
 	}
 	
 }

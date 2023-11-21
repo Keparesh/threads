@@ -116,7 +116,7 @@ public abstract class Snake extends Thread implements Serializable{
 		return board;
 	}
 	
-	public void recalculateRoute() {
+	public synchronized void recalculateRoute() {
 		
 		Cell currentCell = cells.getLast();
 		BoardPosition goalPosition = getBoard().getGoalPosition();
@@ -143,15 +143,23 @@ public abstract class Snake extends Thread implements Serializable{
 				bestPosition = position;
 			}
 		}
-		
-		if (bestPosition != null) {
-			try {
-				Cell nextCell = getBoard().getCell(bestPosition);
-				this.move(nextCell);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
+			if (bestPosition != null) {
+				try {
+					Cell nextCell = getBoard().getCell(bestPosition);
+					this.move(nextCell);
+					System.out.println("movido");
+					System.out.println("Thread " +this.getId() +" State" + this.getState());
+					
+					
+				} catch (InterruptedException e) {
+					//Thread.currentThread().interrupt();
+				}
+			
+			
 		}
+			
+			
+		
 		
 	}
 	

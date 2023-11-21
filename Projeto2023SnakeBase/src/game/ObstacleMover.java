@@ -18,57 +18,23 @@ public class ObstacleMover extends Thread {
 
 	@Override
 	public void run() {
-		// TODO
-		
-		try {
-			while (obstacle.getRemainingMoves() > 0) {
-				
-				//Aguardar o intervalo definido antes de mover o obstáculo
-				Thread.sleep(Obstacle.getObstacleMoveInterval());
-				
-				//Escolher uma nova posição para o obstáculo
-				BoardPosition newPosition = board.findRandomFreePosition();
-				
-				//Mover o obstáculo para a nova posição encontrada
-				moveObstacleToNewPosition(newPosition);
-				
-				//Decrementar o número de movimentos restantes
-				obstacle.decrementRemainingMoves();
-				
+		while (this.obstacle.getRemainingMoves() > 0) {
+			try {
+				BoardPosition new_position = board.findRandomFreePosition();//arranja uma board position nova
+				Cell new_cell = board.getCell(new_position);//vai buscar a cell daquela position
+				obstacle.move(new_cell);
+				Thread.sleep(obstacle.getSleepTime());
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			
-		} catch (InterruptedException e) {
-			
-			//Thread foi interrompida, terminar execução
-			Thread.currentThread().interrupt();
+
 		}
+
 	}
 	
-	private void moveObstacleToNewPosition(BoardPosition newPosition) {
-		
-		//Obter célula atual onde o obstáculo está localizado
-		Cell currentCell = board.getCell(obstacle.getPosition());
-		
-		//Remover o obstáculo da posição atual
-		currentCell.removeObstacle();
-		
-		//Obter a nova célula para onde o obstáculo será movido
-		Cell newCell = board.getCell(newPosition);
-		
-		//Adicionar o obstáculo à nova céula encontrada anteriormente
-		newCell.setGameElement(obstacle);
-		
-		//Atualizar a posição do obstáculo
-		obstacle.setPosition(newPosition);
-		
-		//Notificar mudanças no tabuleiro
-		board.setChanged();
-	
-	}
+
 
 }
 
 
-// é suposto as cobras bloquearem nos obstáculos e só se desviam quando clicamos no botão. 
-// é suposto as cobras evitarem posições onde elas estão
-// método setGameElement tem de ser alterado

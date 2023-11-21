@@ -28,6 +28,7 @@ public class LocalBoard extends Board{
 	private static final int NUM_SNAKES = 2;
 	private static final int NUM_OBSTACLES = 25;
 	private static final int NUM_SIMULTANEOUS_MOVING_OBSTACLES = 3;
+	private ExecutorService threadPoolObstaculos;
 	
 	private volatile boolean gameActive = true;
 	
@@ -39,6 +40,8 @@ public class LocalBoard extends Board{
 		}
 
 		addObstacles( NUM_OBSTACLES);
+		threadPoolObstaculos=Executors.newFixedThreadPool(NUM_SIMULTANEOUS_MOVING_OBSTACLES);
+		
 		
 		Goal goal=addGoal();
 		// System.err.println("All elements placed");
@@ -51,9 +54,10 @@ public class LocalBoard extends Board{
 		
 		// TODO: launch other threads
 		
-		ExecutorService executor = Executors.newFixedThreadPool(NUM_SIMULTANEOUS_MOVING_OBSTACLES);
+
 		for (Obstacle obs : this.getObstacles()) {
-			executor.submit(new ObstacleMover(obs, this));
+			ObstacleMover obsmover= new ObstacleMover(obs, this);
+			threadPoolObstaculos.execute(obsmover);
 		}
 		
 		setChanged();
@@ -66,10 +70,12 @@ public class LocalBoard extends Board{
 		for (Snake snake : snakes) {
 			synchronized (snake) {
 				System.out.println("Notifying snake: " + snake.getIdentification());
-				snake.notifyAll();
 				snake.recalculateRoute();
+
+				
 			}
 		}
+		
 	}
 	
 	
@@ -91,6 +97,8 @@ public class LocalBoard extends Board{
 	public void handleKeyRelease() {
 		// do nothing... No keys relevant in local game
 	}
+	
+
 
 
 

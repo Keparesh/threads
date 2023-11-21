@@ -1,6 +1,9 @@
 package environment;
 
 import java.io.Serializable;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.sound.midi.SysexMessage;
 
@@ -18,6 +21,7 @@ public class Cell {
 	private BoardPosition position;
 	private Snake ocuppyingSnake = null;
 	private GameElement gameElement=null;
+
 	
 	public GameElement getGameElement() {
 		return gameElement;
@@ -33,22 +37,29 @@ public class Cell {
 		return position;
 	}
 
-	public synchronized void request(Snake snake) throws InterruptedException {
+	public void request(Snake snake) throws InterruptedException {
+		synchronized (this) {
+			while (isOcupied()) {
+				System.out.println("a cobra esta bloqueiada");
+				wait(); //A cobra espera até que a célula fique livre.	
+			}
+			if (isOcupiedByGoal()) {
+				 this.getGoal().captureGoal(snake);//se a cobra tentar entrar num goal, ele faz capture de um goal
+				 this.gameElement = null;
+			}
+			ocuppyingSnake=snake;
+		}
 		//TODO coordination and mutual exclusion
-		while (isOcupied()) {
-			wait(); //A cobra espera até que a célula fique livre. 
-		}
-		if (isOcupiedByGoal()) {
-			 this.getGoal().captureGoal(snake);//se a cobra tentar entrar num goal, ele faz capture de um goal
-			 this.gameElement = null;
-		}
-		ocuppyingSnake=snake;
+		
 	}
 
 	public synchronized void release() {
 		//TODO
-		ocuppyingSnake=null;
-		notifyAll(); //Notifica as cobras que estão à espera. 
+		synchronized (this) {
+			ocuppyingSnake=null;
+			notifyAll(); //Notifica as cobras que estão à espera. 
+		}
+		
 	}
 
 	public boolean isOcupiedBySnake() {
