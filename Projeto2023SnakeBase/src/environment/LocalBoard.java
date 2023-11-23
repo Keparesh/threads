@@ -46,6 +46,7 @@ public class LocalBoard extends Board{
 		Goal goal=addGoal();
 		// System.err.println("All elements placed");
 	}
+	
 
 	public void init() {
 		
@@ -97,6 +98,8 @@ public class LocalBoard extends Board{
 	public void handleKeyRelease() {
 		// do nothing... No keys relevant in local game
 	}
+
+	
 	
 
 

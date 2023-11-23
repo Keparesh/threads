@@ -5,7 +5,7 @@ import environment.BoardPosition;
 import environment.LocalBoard;
 
 public class Goal extends GameElement  {
-	private int value=1;
+	private static int value=1;
 	private Board board;
 	public static final int MAX_VALUE=10;
 	
@@ -13,9 +13,10 @@ public class Goal extends GameElement  {
 		this.board = board2;
 	}
 	
-	public int getValue() {
+	public static int getValue() {
 		return value;
 	}
+	
 	public void incrementValue() throws InterruptedException {
 		//TODO
 		this.value ++;
