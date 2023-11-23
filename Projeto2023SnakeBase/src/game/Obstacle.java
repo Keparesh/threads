@@ -57,7 +57,7 @@ public class Obstacle extends GameElement {
 	
 	public void move(Cell cell) throws InterruptedException{
 		getCell().removeObstacle();
-		cell.setGameElement(this);
+		cell.setGameElement(this);//esta´feito no setgameelement, uma vez que o set gameelement só pode ser usada de forma sincronizada.
 		decrementRemainingMoves();
 		getBoard().setChanged();
 	}

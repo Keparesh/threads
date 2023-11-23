@@ -128,7 +128,6 @@ public abstract class Snake extends Thread implements Serializable{
 		for (BoardPosition neighbor : getBoard().getNeighboringPositions(currentCell)) {
 			Cell neighborCell = getBoard().getCell(neighbor);
 			if (!neighborCell.isOcupied()) {
-				System.out.println("OKKKKKKKK");
 				alternativeRoutes.add(neighbor);
 			}
 		}
@@ -149,10 +148,11 @@ public abstract class Snake extends Thread implements Serializable{
 					this.move(nextCell);
 					System.out.println("movido");
 					System.out.println("Thread " +this.getId() +" State" + this.getState());
+					this.interrupt();
 					
 					
 				} catch (InterruptedException e) {
-					//Thread.currentThread().interrupt();
+					run();
 				}
 			
 			
