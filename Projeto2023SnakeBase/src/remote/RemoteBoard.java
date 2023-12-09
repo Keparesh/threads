@@ -21,19 +21,47 @@ import game.Snake;
  */
 public class RemoteBoard extends Board{
 	
+	private Client client;
+	
+	
+	public RemoteBoard(Client client) {
+		this.client = client;
+	}
+	
 	@Override
 	public void handleKeyPress(int keyCode) {
 		//TODO
+		
+		/*
+		 * Converter em texto o keyCode para a direção 
+		 */
+	
+		client.sendMessage("");
+		
 	}
 
 	@Override
 	public void handleKeyRelease() {
 		// TODO
+		
+		/*
+		 * fazer depois
+		 */
+		
 	}
 
 	@Override
 	public void init() {
-		// TODO 		
+		// TODO 
+		
+		/*
+		 * inicializar o jogo (ver local board)
+		 * correr o método do client que está sempre a receber updates (listenForMessages) client.listenForMessages(this)
+		 * 
+		 */
+		
+		
+		
 	}
 
 

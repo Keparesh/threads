@@ -59,7 +59,6 @@ public abstract class Snake extends Thread implements Serializable{
 		if (getSize() < cells.size()) {
 			Cell last = cells.removeFirst();
 			last.release();
-			
 		}
 		
 		//Notifica mudanças no tabuleiro

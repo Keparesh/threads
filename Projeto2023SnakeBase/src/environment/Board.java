@@ -10,6 +10,7 @@ import game.GameElement;
 import game.Goal;
 import game.Obstacle;
 import game.Snake;
+import game.HumanSnake;
 
 public abstract class Board extends Observable {
 	protected Cell[][] cells;
@@ -32,6 +33,7 @@ public abstract class Board extends Observable {
 
 	}
 	
+
 	
 	public int getGoalValue() {
 		return Goal.getValue();
@@ -93,7 +95,6 @@ public abstract class Board extends Observable {
 	}
 
 	
-
 	protected Goal addGoal() {
 		Goal goal=new Goal(this);
 		addGameElement( goal);
@@ -127,12 +128,20 @@ public abstract class Board extends Observable {
 	}
 
 	
-	public abstract void init(); 
+	public abstract void init();
 	
 	public abstract void handleKeyPress(int keyCode);
 
 	public abstract void handleKeyRelease();
 	
+	
+	public boolean isValidPosition(int x, int y) {
+        if (x >= 0 && x < NUM_COLUMNS && y >= 0 && y < NUM_ROWS) {
+            Cell cell = getCell(new BoardPosition(x, y));
+            return !cell.isOcupied(); // Verifica se a célula não está ocupada por uma cobra ou obstáculo
+        }
+        return false;
+    }
 	
 	
 
